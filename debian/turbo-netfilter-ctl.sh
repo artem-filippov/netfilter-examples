@@ -14,7 +14,7 @@ Options:"
     -h, --help                    : Shows this help
     -s, --status                  : Shows status
     -S, --save                    : Save rules to file
-    -L, --load                    : Load rules from file
+    -R, --restore                 : Restore rules from file
     -D, --delete                  : Delete rules 
 EOF
 }
@@ -71,7 +71,7 @@ iptables_save()
     echo "done"
 }
 
-iptables_load()
+iptables_restore()
 {
     iptables_check
     
@@ -81,8 +81,8 @@ iptables_load()
         exit 1
     fi
 
-    echo -e "INFO: Load rules... "
-    iptables-load > $WORK_DIR/$WORK_FILE
+    echo -e "INFO: Restore rules... "
+    iptables-restore > $WORK_DIR/$WORK_FILE
     echo "done"
 }
 
@@ -120,8 +120,8 @@ if [[ $1 = "-S" || $1 = "--save" ]]; then
     iptables_save
 fi
 
-if [[ $1 = "-L" || $1 = "--load" ]]; then
-    iptables_load
+if [[ $1 = "-R" || $1 = "--restore" ]]; then
+    iptables_restore
 fi
 
 if [[ $1 = "-D" || $1 = "--delete" ]]; then
