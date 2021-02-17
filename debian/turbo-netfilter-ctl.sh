@@ -81,7 +81,7 @@ iptables_restore()
         exit 1
     fi
 
-    echo -e "INFO: Restore rules... "
+    echo -n "INFO: Restore rules... "
     iptables-restore < $WORK_DIR/$WORK_FILE > /dev/null 2>&1
     echo "done"
 }
@@ -91,11 +91,11 @@ iptables_delete()
     iptables_check
 
     echo -n "INFO: Delete rules... "
-    iptables -P INPUT ACCEPT
-    iptables -P FORWARD ACCEPT
-    iptables -P OUTPUT ACCEPT
-    iptables -F
-    iptables -X
+    iptables -P INPUT ACCEPT > /dev/null 2>&1
+    iptables -P FORWARD ACCEPT > /dev/null 2>&1
+    iptables -P OUTPUT ACCEPT > /dev/null 2>&1
+    iptables -F > /dev/null 2>&1
+    iptables -X > /dev/null 2>&1
     echo "done"
 }
 
