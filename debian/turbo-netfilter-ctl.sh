@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
-FILE_NAME="rules"
-DIR_NAME="turbo-netfilter-ctl"
-WORK_DIR="/usr/local/etc/"
+WORK_FILE="rules"
+WORK_DIR="/usr/local/etc/turbo-netfilter-ctl"
 
 # Пример использования
 usage()
