@@ -82,7 +82,7 @@ iptables_restore()
     fi
 
     echo -e "INFO: Restore rules... "
-    iptables-restore > $WORK_DIR/$WORK_FILE
+    iptables-restore < $WORK_DIR/$WORK_FILE
     echo "done"
 }
 
