@@ -67,7 +67,7 @@ iptables_save()
     fi
 
     echo -n "INFO: Save rules... "
-    iptables-save > $WORK_DIR/$WORK_FILE
+    iptables-save > $WORK_DIR/$WORK_FILE > /dev/null 2>&1
     echo "done"
 }
 
@@ -82,7 +82,7 @@ iptables_restore()
     fi
 
     echo -e "INFO: Restore rules... "
-    iptables-restore < $WORK_DIR/$WORK_FILE
+    iptables-restore < $WORK_DIR/$WORK_FILE > /dev/null 2>&1
     echo "done"
 }
 
