@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+FILE_NAME="rules"
+DIR_NAME="turbo-netfilter-ctl"
+WORK_DIR="/usr/local/etc/"
+
 # Пример использования
 usage()
 {
@@ -10,6 +14,9 @@ Usage:
 Options:"
     -h, --help                    : Shows this help
     -s, --status                  : Shows status
+    -S, --save                    : Save rules to file
+    -L, --load                    : Load rules from file
+    -D, --delete                  : Delete rules 
 EOF
 }
 
@@ -28,12 +35,69 @@ iptables_check()
         echo -e "ERROR: iptables command not found"
         exit 1
     fi
+
+    if ! command -v iptables-save > /dev/null 2>&1; then
+        echo -e "ERROR: iptables-save command not found"
+        exit 1
+    fi
+
+    if ! command -v iptables-restore > /dev/null 2>&1; then
+        echo -e "ERROR: iptables-restore command not found"
+        exit 1
+    fi
 }
 
 iptables_status()
 {
     iptables_check
-    iptables -L -n -v
+
+    echo -e "INFO: iptables version:"
+    iptables --version
+
+    echo -e "INFO: iptables rules:"
+    iptables -L -n -v --line-numbers
+}
+
+iptables_save()
+{
+    iptables_check
+    
+    # Проверяем каталог
+    if [ ! -e "$WORK_DIR" ]; then
+        mkdir $WORK_DIR
+    fi
+
+    echo -n "INFO: Save rules... "
+    iptables-save > $WORK_DIR/$FILE_NAME
+    echo "done"
+}
+
+iptables_load()
+{
+    iptables_check
+    
+    # Проверяем файл с правилами
+    if [ ! -e "$WORK_DIR/$FILE_NAME" ]; then
+        echo -e "ERROR: File not found"
+        exit 1
+    fi
+
+    echo -e "INFO: Load rules... "
+    iptables-load > $WORK_DIR/$FILE_NAME
+    echo "done"
+}
+
+iptables_delete()
+{
+    iptables_check
+
+    echo -n "INFO: Delete rules... "
+    iptables -P INPUT ACCEPT
+    iptables -P FORWARD ACCEPT
+    iptables -P OUTPUT ACCEPT
+    iptables -F
+    iptables -X
+    echo "done"
 }
 
 # Проверки параметров командной строки
@@ -51,5 +115,16 @@ fi
 
 if [[ $1 = "-s" || $1 = "--status" ]]; then
     iptables_status
-    exit 0
+fi
+
+if [[ $1 = "-S" || $1 = "--save" ]]; then
+    iptables_save
+fi
+
+if [[ $1 = "-L" || $1 = "--load" ]]; then
+    iptables_load
+fi
+
+if [[ $1 = "-D" || $1 = "--delete" ]]; then
+    iptables_delete
 fi
