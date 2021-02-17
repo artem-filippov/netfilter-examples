@@ -67,7 +67,7 @@ iptables_save()
     fi
 
     echo -n "INFO: Save rules... "
-    iptables-save > $WORK_DIR/$FILE_NAME
+    iptables-save > $WORK_DIR/$WORK_NAME
     echo "done"
 }
 
@@ -76,13 +76,13 @@ iptables_load()
     iptables_check
     
     # Проверяем файл с правилами
-    if [ ! -e "$WORK_DIR/$FILE_NAME" ]; then
+    if [ ! -e "$WORK_DIR/$WORK_NAME" ]; then
         echo -e "ERROR: File not found"
         exit 1
     fi
 
     echo -e "INFO: Load rules... "
-    iptables-load > $WORK_DIR/$FILE_NAME
+    iptables-load > $WORK_DIR/$WORK_NAME
     echo "done"
 }
 
